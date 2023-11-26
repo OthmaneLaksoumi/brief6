@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Pagination Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .content {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .page-link {
+            padding: 8px;
+            margin: 0 5px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .page-link:hover {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <ul id="list">
+            <!-- Vos éléments de liste ici -->
+            <li>Element 1</li>
+            <li>Element 2</li>
+            <li>Element 3</li>
+            <li>Element 4</li>
+            <li>Element 5</li>
+            <li>Element 6</li>
+            <li>Element 7</li>
+            <li>Element 8</li>
+            <li>Element 9</li>
+            <li>Element 10</li>
+        </ul>
+        <div id="pagination" class="pagination"></div>
+    </div>
+
+
+    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const list = document.getElementById('list');
+            const pagination = document.getElementById('pagination');
+            const itemsPerPage = 4; // Nombre d'éléments par page
+
+            function displayList(items, startIndex, endIndex) {
+                list.innerHTML = '';
+                for (let i = startIndex; i < endIndex; i++) {
+                    list.appendChild(items[i].cloneNode(true));
+                }
+            }
+
+            function setupPagination(items) {
+                pagination.innerHTML = '';
+
+                var x = 0;
+
+                const pageCount = Math.ceil(items.length / itemsPerPage);
+
+                for (let i = 1; i <= pageCount; i++) {
+                    const pageLink = document.createElement('a');
+                    pageLink.href = '#';
+                    pageLink.classList.add('page-link');
+                    pageLink.textContent = i;
+
+                    pageLink.addEventListener('click', function () {
+                        const startIndex = (i - 1) * itemsPerPage;
+                        const endIndex = startIndex + itemsPerPage;
+                        displayList(items, startIndex, endIndex);
+                    });
+
+                    pagination.appendChild(pageLink);
+                }
+            }
+
+            // Récupérer tous les éléments de la liste
+            const allItems = Array.from(list.children);
+
+            // Afficher la première page au chargement de la page
+            displayList(allItems, 0, itemsPerPage);
+
+            // Configurer la pagination
+            setupPagination(allItems);
+            
+        });
+
+    </script>
+</body>
+
+</html>
