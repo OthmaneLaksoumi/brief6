@@ -3,7 +3,7 @@
 $conn = new PDO('mysql:host=localhost;dbname=brief6', 'root', '');
 $stmt1 = $conn->prepare("SELECT * FROM categories");
 $stmt1->execute();
-$catg = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+$catgs = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 $stmt2 = $conn->prepare("SELECT * FROM products");
 $stmt2->execute();
 $prod = $stmt2->fetchAll(PDO::FETCH_ASSOC);
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $desc = $_POST["desc"];
     $qntMin = $_POST["qntMin"];
     $qntStock = $_POST["qntStock"];
-    $img = $_POST["img"];
+    $img = "assets/images/" . $_FILES["img"]["name"];
     $catg = $_POST["catg"];
 
     $stmt = $conn->prepare("INSERT INTO 
@@ -28,6 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $stmt->execute([$title, $codeBar, $prixAchat, $prixFinal, $prixFinal, $desc, $qntMin, $qntStock, $img, $catg]);
+
+    move_uploaded_file($_FILES['img']['tmp_name'], 'C:\xampp\htdocs\brief6\assets\images\\' . $_FILES['img']['name']);
+
+
+    
 }
 
 
@@ -80,16 +85,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     <section class="dashboard">
-        <?php 
-            include("sideBar.html");
+        <?php
+        include("sideBar.html");
         ?>
 
         <div class="col-md-10">
             <h1>Ajouter un Produit</h1>
-            <form action="" method="post" class="container">
+            <form action="" method="post" class="container" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="img" class="form-label">Upload Image</label>
+                    <input type="file" class="form-control" id="img" name="img" required>
                 </div>
                 <div class="mb-3">
                     <label for="codeBar" class="form-label">Code à Bare</label>
@@ -105,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
                 <div class="mb-3">
                     <label for="desc" class="form-label">Description</label>
-                    <input type="text" class="form-control" id="desc" name="desc" required>
+                    <textarea type="text" class="form-control" id="desc" name="desc" rows="4" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="qntMin" class="form-label">Quantity Minimale</label>
@@ -115,20 +124,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <label for="qntStcok" class="form-label">Quantity Stock</label>
                     <input type="text" class="form-control" id="qntStock" name="qntStock" required>
                 </div>
-                <div class="mb-3">
-                    <label for="img" class="form-label">Image Source</label>
-                    <input type="text" class="form-control" id="img" name="img" required>
-                </div>
+
                 <div class="mb-3">
                     <label for="catg" class="form-label">Category</label>
                     <select name="catg" id="" class="form-control">
                         <?php
-                        foreach ($catg as $item) {
+                        foreach ($catgs as $item) {
                             echo "<option>" . $item["name"] . "</option>";
                         }
                         ?>
                     </select>
-                    <!-- <input type="text" class="form-control" id="catg" name="catg" required> -->
                 </div>
 
                 <input type="submit" class="btn btn-primary my-5" value="Ajouter">

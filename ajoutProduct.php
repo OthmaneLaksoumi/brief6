@@ -120,8 +120,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="mb-3">
                 <label for="img" class="form-label">Image Source</label>
                 <input type="text" class="form-control" id="img" name="img" required>
+                    <!-- <input type="file" name="img" class="form-control"> -->
             </div>
-            <div class="mb-3">
+            <div class="mb-3 container">
                 <label for="catg" class="form-label">Category</label>
                 <select name="catg" id="" class="form-control">
                     <?php

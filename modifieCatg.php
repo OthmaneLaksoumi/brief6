@@ -1,17 +1,11 @@
 <?php
 
 $conn = new PDO('mysql:host=localhost;dbname=brief6', 'root', '');
-$stmt1 = $conn->prepare('SELECT * FROM categories');
-$stmt1->execute();
-$catg = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $conn->prepare('SELECT * FROM categories');
+$stmt->execute();
+$catg = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    // echo '<pre>';
-    // print_r($_POST);
-    // echo '</pre>';
-
+if (isset($_POST["modifie"])) {
     $selected = $_POST["catg"];
     $name = $_POST["name"];
     $desc = $_POST["desc"];
@@ -25,10 +19,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->execute();
 }
 
+if (isset($_POST["choisir"])) {
+    $catgSelected = $_POST["catg"];
+    $stmt1 = $conn->prepare("SELECT * FROM categories WHERE name = '$catgSelected'");
+    $stmt1->execute();
+    $result = $stmt1->fetchAll(PDO::FETCH_ASSOC)[0];
+    $catgName = $result["name"];
+    $catgDesc = $result["descrt"];
+    echo '<pre>';
+    print_r($result);
+    echo '</pre>';
 
 
-
-
+}
 ?>
 
 <!DOCTYPE html>
@@ -79,10 +82,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php
         include("sideBar.html");
         ?>
-        <!-- </div> -->
-        <!-- </div> -->
-
-
 
         <div class="col-md-10">
             <h1>Modifier une Categorie</h1>
@@ -96,23 +95,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         }
                         ?>
                     </select>
-                    <!-- <input type="text" class="form-control" id="catg" name="catg" required> -->
                 </div>
-                <div class="mb-3">
-                    <label for="title" class="form-label">Nouveau Nom de la catégorie</label>
-                    <input type="text" class="form-control" id="title" name="name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="title" class="form-label">Nouveau Description de la catégorie</label>
-                    <textarea type="text" class="form-control" id="title" name="desc" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="img" class="form-label">Nouveau Image Source</label>
-                    <input type="text" class="form-control" id="img" name="img" required>
-                </div>
+                <input type="submit" class="btn btn-primary my-2" name="choisir" value="Choisir">
+
+                <?php if (isset($_POST["choisir"])) { ?>
+                    <form action="" method="post" class="container">
+
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Nouveau Nom de la catégorie</label>
+                            <input type="text" class="form-control" id="title" name="name" required
+                                value='<?php echo $catgName ?>'>
+                        </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Nouveau Description de la catégorie</label>
+                            <textarea type="text" class="form-control" id="title" name="desc" rows="4" required>
+                                    <?php echo $catgDesc ?>'>
+
+                                </textarea>
+                        </div>
+                        <!-- <div class="mb-3">
+                                <label for="img" class="form-label">Nouveau Image Source</label>
+                                <input type="text" class="form-control" id="img" name="img" required>
+                            </div> -->
 
 
-                <input type="submit" class="btn btn-primary my-5" value="Ajouter">
+                        <input type="submit" class="btn btn-primary my-5" name="modifie" value="Modifier">
+
+                    </form>
+                <?php } ?>
+
             </form>
         </div>
     </section>
