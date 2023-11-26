@@ -98,13 +98,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="col-md-10">
             <h1>Afficher une Produit masqués</h1>
+            <?php
+            if (count($products) > 0) {
+                ?>
             <form action="" method="post" class="container">
                 <div class="mb-3">
                     <label for="catg" class="form-label">Choisir une Produit</label>
                     <select name="hided" id="" class="form-control">
                         <?php
                         foreach ($catgs as $catg) {
+                            $temp = $catg["name"];
+                            $stmt = $conn->prepare("SELECT * FROM products WHERE catg = '$temp' AND isHide = 1");
+                            $stmt->execute();
+                            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            if (count($res) > 0) {
                                 echo "<optgroup label=" . $catg["name"] . ">" . $catg["name"];
+                            }
                             foreach ($products as $product) {
                                 if ($product["catg"] === $catg["name"]) {
                                     echo "<option>" . $product["etiquette"] . "</option>";
@@ -117,8 +126,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
 
-                <input type="submit" class="btn btn-primary my-2" value="Masquer">
+                <input type="submit" class="btn btn-primary my-2" value="Afficher">
             </form>
+            <?php } else {
+                echo "<p class='all-valid'>Tous les produits sont affichés.</p>";
+            } ?>
         </div>
     </section>
 
