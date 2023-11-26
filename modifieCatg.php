@@ -9,14 +9,17 @@ if (isset($_POST["modifie"])) {
     $selected = $_POST["catg"];
     $name = $_POST["name"];
     $desc = $_POST["desc"];
-    $img = $_POST["img"];
+    // $img = $_POST["img"];
 
     $sql = "UPDATE categories
-    SET name = '$name', descrt = '$desc', img = '$img' 
+    SET name = '$name', descrt = '$desc' 
     WHERE name = '$selected'";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute();
+
+    header("Location: modifieCatg.php");
+    exit;
 }
 
 if (isset($_POST["choisir"])) {
@@ -26,11 +29,6 @@ if (isset($_POST["choisir"])) {
     $result = $stmt1->fetchAll(PDO::FETCH_ASSOC)[0];
     $catgName = $result["name"];
     $catgDesc = $result["descrt"];
-    echo '<pre>';
-    print_r($result);
-    echo '</pre>';
-
-
 }
 ?>
 
@@ -104,12 +102,12 @@ if (isset($_POST["choisir"])) {
                         <div class="mb-3">
                             <label for="title" class="form-label">Nouveau Nom de la catégorie</label>
                             <input type="text" class="form-control" id="title" name="name" required
-                                value='<?php echo $catgName ?>'>
+                                value='<?php echo $catgName ?>' >
                         </div>
                         <div class="mb-3">
                             <label for="title" class="form-label">Nouveau Description de la catégorie</label>
-                            <textarea type="text" class="form-control" id="title" name="desc" rows="4" required>
-                                    <?php echo $catgDesc ?>'>
+                            <textarea type="text" class="form-control" id="title" name="desc" rows="5" required>
+                                    <?php echo $catgDesc ?>
 
                                 </textarea>
                         </div>

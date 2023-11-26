@@ -12,7 +12,7 @@ try {
         header("Location: index.php");
     }
 } catch (PDOException $e) {
-    
+    $exit = true;
 }
 
 
@@ -52,7 +52,7 @@ try {
 
 
     <h1>Sign Up</h1>
-
+   
     <div class="parent-form">
         <form  method="post" class="container">
             <div class="mb-3">
@@ -69,6 +69,13 @@ try {
             </div>
             <input type="submit" class="btn btn-primary" value="Sign Up" name="submit">
         </form>
+
+        <?php 
+        if(isset($exit)) {
+            echo "<p class='text-danger'>The email is Duplicated</p>";
+        }
+    
+    ?>
 
         <div class="sign">
             <p>Vous avez déjà un compte ? &nbsp;&nbsp;</p>

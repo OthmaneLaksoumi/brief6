@@ -8,12 +8,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $name = $_POST["name"];
     $desc = $_POST["desc"];
-    $img = $_POST["img"];
+    $img = "assets/catgImages/" . $_FILES['img']['name'];
     $stmt = $conn->prepare("INSERT INTO 
         categories(name, descrt, img)
          VALUES (?, ?, ?)");
 
     $stmt->execute([$name, $desc, $img]);
+
+    move_uploaded_file($_FILES['img']['tmp_name'], 'C:\xampp\htdocs\brief6\assets\catgImages\\' . $_FILES['img']['name']);
+
 }
 
 
@@ -74,18 +77,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="col-md-10">
             <h1>Ajouter une Categorie</h1>
-            <form action="" method="post" class="container">
+            <form action="" method="post" class="container" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Name de categorie</label>
                     <input type="text" class="form-control" id="title" name="name" required>
                 </div>
                 <div class="mb-3">
                     <label for="title" class="form-label">Description de categorie</label>
-                    <textarea type="text" class="form-control" id="title" name="desc" required></textarea>
+                    <textarea type="text" class="form-control" id="title" name="desc" rows="4" required></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="img" class="form-label">Image Source</label>
-                    <input type="text" class="form-control" id="img" name="img" required>
+                    <label for="img" class="form-label">Upload Image</label>
+                    <input type="file" class="form-control" id="img" name="img" required>
                 </div>
 
 

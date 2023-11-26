@@ -1,12 +1,13 @@
 <?php
 
 $conn = new PDO('mysql:host=localhost;dbname=brief6', 'root', '');
-$stmt1 = $conn->prepare('SELECT * FROM products WHERE isHide = 1');
+$stmt = $conn->prepare('SELECT * FROM categories WHERE isHide = 1');
+$stmt->execute();
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stmt1 = $conn->prepare("SELECT * FROM categories WHERE isHide = 1");
 $stmt1->execute();
-$products = $stmt1->fetchAll(PDO::FETCH_ASSOC);
-$stmt2 = $conn->prepare('SELECT * FROM categories');
-$stmt2->execute();
-$catgs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+$res = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
 // echo '<pre>';
 // print_r($products);
@@ -21,15 +22,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $hideProduct = $_POST["hided"];
 
-    $sql = "UPDATE products
-        SET isHide = 0
-        WHERE etiquette = '$hideProduct'
-    ";
+    // echo $hideProduct;
 
-    $stmt3 = $conn->prepare($sql);
+    $sql1 = "UPDATE categories
+        SET isHide = 0
+        WHERE name = '$hideProduct'
+    ";
+    $stmt2 = $conn->prepare($sql1);
+    $stmt2->execute();
+
+    $stmt3 = $conn->prepare("UPDATE products SET isHide = 0 WHERE catg = '$hideProduct'");
     $stmt3->execute();
 
-    header("Refresh: 1; url=afficheMasquer.php");
+    header("Refresh: 1; url=afficheCatgMasquer.php");
     exit;
 
 
@@ -97,39 +102,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
         <div class="col-md-10">
-            <h1>Afficher une Produit masqués</h1>
+            <h1>Afficher une Produit masqué</h1>
             <?php
             if (count($products) > 0) {
                 ?>
-            <form action="" method="post" class="container">
-                <div class="mb-3">
-                    <label for="catg" class="form-label">Choisir un Produit</label>
-                    <select name="hided" id="" class="form-control">
-                        <?php
-                        foreach ($catgs as $catg) {
-                            $temp = $catg["name"];
-                            $stmt = $conn->prepare("SELECT * FROM products WHERE catg = '$temp' AND isHide = 1");
-                            $stmt->execute();
-                            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                            if (count($res) > 0) {
-                                echo "<optgroup label=" . $catg["name"] . ">" . $catg["name"];
+                <form action="" method="post" class="container">
+                    <div class="mb-3">
+                        <label for="catg" class="form-label">Choisir une categorie</label>
+                        <select name="hided" id="" class="form-control">
+                            <?php
+
+
+                            foreach ($res as $row) {
+                                echo "<option>" . $row["name"] . "</option>";
+
                             }
-                            foreach ($products as $product) {
-                                if ($product["catg"] === $catg["name"]) {
-                                    echo "<option>" . $product["etiquette"] . "</option>";
-                                }
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
+
+
+                            ?>
+                        </select>
+                    </div>
 
 
 
-                <input type="submit" class="btn btn-primary my-2" value="Afficher">
-            </form>
+                    <input type="submit" class="btn btn-primary my-2" value="Afficher">
+                </form>
             <?php } else {
-                echo "<p class='all-valid'>Tous les produits sont affichés.</p>";
+                echo "<p class='all-valid'>Tous les categories sont affichés.</p>";
             } ?>
         </div>
     </section>

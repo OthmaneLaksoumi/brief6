@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ?>
                 <form action="" method="post" class="container">
                     <div class="mb-3">
-                        <label for="catg" class="form-label">Choisir une Produit</label>
+                        <label for="catg" class="form-label">Choisir un Produit</label>
                         <select name="hided" id="" class="form-control">
                             <?php
                             foreach ($catgs as $catg) {

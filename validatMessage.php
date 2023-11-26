@@ -36,11 +36,9 @@
     <?php
     if($_COOKIE["state"] === "0") {
         echo "<h1>Votre statue n'est pas valid.";
-    } else if($_COOKIE["role"] === "0") {
+    } else  {
         header("Location: productsUser.php");
         exit;
-    } else {
-        header("Location: dashboard.php");
     }
 
     ?>
