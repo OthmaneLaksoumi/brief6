@@ -1,15 +1,10 @@
 <?php
 
 try {
-
-
-
     $conn = new PDO('mysql:host=localhost;dbname=brief6', 'root', '');
     $stmt = $conn->prepare("SELECT * FROM products WHERE isHide = 0");
     $stmt->execute();
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
 } catch (Exception $e) {
 
 }
@@ -23,8 +18,6 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products</title>
-
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
@@ -59,12 +52,6 @@ try {
 
         </div>
     </nav>
-
-    <?php
-    // $name = $_POST['identifiant'];
-    // echo "<h1>Welcome $name </h1>";
-    
-    ?>
 
     <div class="select">
 
@@ -112,9 +99,13 @@ try {
 
         }
         ?>
+
+
     </div>
 
+    <ul class="pagination" id="pagination">
 
+    </ul>
 
 
     <script src="script.js"></script>

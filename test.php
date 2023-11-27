@@ -10,50 +10,104 @@
     <title>Simple Bootstrap Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        div {
-            background-color: #eee;
-            width: 25%;
-            margin: auto;
+        #content {
+            max-width: 300px;
+            margin: 20px auto;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        #items {
+            list-style: none;
+            padding: 0;
+        }
+
+        #items li {
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+            padding: 10px;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa voluptatem maxime placeat, consectetur
-            doloremque veritatis dolores <span class="hide" style="display: none;">ea esse id repudiandae repellendus?
-                Nostrum velit soluta impedit quae
-                reprehenderit aliquid vitae vel?</span> <span class="changeName text-danger" onclick="show()"
-                style="cursor: pointer;">Show more</span></p>
+    <div id="content">
+        <ul id="items">
+            
+        </ul>
+
+        <ul class="pagination" id="pagination"></ul>
     </div>
-
-    <form action="" enctype="multipart/form-data" method="post">
-        <input type="file" name="jj">
-        <input type="submit">
-    </form>
-
-    <?php
-    echo '<pre>';
-    print_r($_FILES);
-    echo '</pre>';
-
-
-
-    ?>
 
 
     <script>
-        function show() {
-            let para = document.querySelector(".hide");
-            if (para.style.display !== 'none') {
-                para.style.display = 'none';
-                document.querySelector(".changeName").textContent = 'Show More';
+        const itemsPerPage = 5;
+        const totalItems = 25;
+        const items = [];
 
-            } else {
-                para.style.display = 'inline';
-                document.querySelector(".changeName").textContent = 'Show less';
-            }
+        for (let i = 1; i <= totalItems; i++) {
+            items.push(`Item ${i}`);
         }
+
+        let currentPage = 1;
+
+        function displayItems(page) {
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const displayedItems = items.slice(startIndex, endIndex);
+
+            const itemsList = document.getElementById('items');
+            itemsList.innerHTML = '';
+
+            displayedItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                itemsList.appendChild(li);
+            });
+        }
+
+        function setupPagination() {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const paginationElement = document.getElementById('pagination');
+            paginationElement.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.textContent = i;
+                li.addEventListener('click', () => {
+                    currentPage = i;
+                    displayItems(currentPage);
+                    updatePaginationStyles();
+                });
+                paginationElement.appendChild(li);
+            }
+
+            updatePaginationStyles();
+        }
+
+        function updatePaginationStyles() {
+            const paginationItems = document.querySelectorAll('.pagination li');
+            paginationItems.forEach((item, index) => {
+                if (index + 1 === currentPage) {
+                    item.style.fontWeight = 'bold';
+                } else {
+                    item.style.fontWeight = 'normal';
+                }
+            });
+        }
+
+        // Initial setup
+        displayItems(currentPage);
+        setupPagination();
     </script>
 </body>
 

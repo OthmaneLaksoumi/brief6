@@ -113,6 +113,20 @@ table tr .nonValider {
 }
 
 .modifie-pro img {
-    /* display: none; */
     width: 40%;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    width: fit-content;
+    margin: 50px auto;
+}
+
+.pagination li {
+    margin-right: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: black 2px solid;
 }

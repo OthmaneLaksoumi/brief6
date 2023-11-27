@@ -5,7 +5,7 @@ let robot = document.querySelectorAll(".Robot");
 let diode = document.querySelectorAll(".Diode");
 let batterie = document.querySelectorAll(".Batterie");
 
-let catg = [arduino, afficheur, robot, diode, batterie];
+let catg = [afficheur, arduino, batterie, diode, robot];
 
 filter.addEventListener('change', function () {
     catg.forEach(function (categorie) {
@@ -41,9 +41,44 @@ filter.addEventListener('change', function () {
             });
         });
     }
-
-
-
 });
+
+let itemsPerPage = 5;
+let itemsList = document.querySelector('.product-menu').querySelectorAll('.product-item');
+const totalItems = itemsList.length;
+const numberOfPages = Math.ceil(totalItems / itemsPerPage);
+for (let i = 0; i < numberOfPages; i++) {
+    let paginationNumber = document.createElement('li');
+    paginationNumber.innerText = i + 1;
+    document.querySelector('.pagination').appendChild(paginationNumber);
+}
+
+function displayItems(i, j) {
+
+    let itemsAfficher = Array.from(itemsList);
+    itemsAfficher.forEach(function (pro, index) {
+        if ((index >= i && index <= j)) {
+            pro.style.display = 'block';
+        } else {
+            pro.style.display = 'none';
+
+        }
+    })
+    // console.log(itemsAfficher);
+}
+displayItems(0, itemsPerPage - 1);
+let paginationBtn = Array.from(document.querySelector('.pagination').querySelectorAll('li'));
+
+paginationBtn.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        displayItems((Number(btn.innerText) - 1) * itemsPerPage, (Number(btn.innerText) - 1) * itemsPerPage + itemsPerPage - 1);
+    })
+})
+
+itemsList.forEach(function (item) {
+    item.addEventListener('click', function () {
+        console.log(item.innerText);
+    })
+})
 
 
