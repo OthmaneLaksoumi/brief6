@@ -24,6 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         setcookie("ref", $productModifie["codeBarres"]);
     }
 
+    // echo '<pre>';
+    // print_r($_FILES);
+    // echo '</pre>';
+
+
     if (isset($_POST["modifie"])) {
         $ref = $_COOKIE["ref"];
         $title = $_POST['title'];
@@ -33,10 +38,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $qnt_min = $_POST['qntMin'];
         $qnt_stock = $_POST['qntStock'];
         $catg = $_POST['catg'];
+        $img = "assets/images/" . $_FILES['img']['name'];
+
+        move_uploaded_file($_FILES['img']['tmp_name'], 'C:\xampp\htdocs\brief6\assets\images\\' . $_FILES['img']['name']);
+
 
         $sql = "UPDATE `products` 
         SET `etiquette` = '$title', `descpt` = '$desc', `prixAchat` = '$prixAchat', `prixFinal` = '$prixFinal',
-        `qntMin` = '$qnt_min', `qntStock` = '$qnt_stock', catg = '$catg' WHERE `products`.`codeBarres` = '$ref'";
+        `qntMin` = '$qnt_min', `qntStock` = '$qnt_stock', `catg` = '$catg', `img` = '$img' WHERE `products`.`codeBarres` = '$ref'";
 
         $stmt4 = $conn->prepare($sql);
         $stmt4->execute();
@@ -138,15 +147,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <?php
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ?>
-                <form action="" method="post" class="container modifie-pro d-flex align-items-center">
-
-                    <div class="mb-3 d-flex justify-content-center">
-                        <img class="my-5" src='<?php echo $productModifie['img'] ?>'>
-                    </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    <img class="my-5" src='<?php echo $productModifie['img'] ?>'>
+                </div>
+                <form action="" method="post" class="container modifie-pro d-flex align-items-center"
+                    enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
                         <input type="text" class="form-control" id="title" name="title"
                             value='<?php echo $productModifie['etiquette'] ?>' required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="img" class="form-label">Upload Image</label>
+                        <input type="file" class="form-control" id="img" name="img">
                     </div>
                     <div class="mb-3">
                         <label for="prixAchat" class="form-label">Prix d'achat</label>

@@ -9,13 +9,6 @@ try {
     $stmt->execute();
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    
-
-
-
-
-
-
 
 } catch (Exception $e) {
 
@@ -42,7 +35,7 @@ try {
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary container">
         <div class="collapse navbar-collapse position-relative " id="navbarTogglerDemo01">
-        <a class="navbar-brand col-5" href="index.php">ElectroNacer</a>
+            <a class="navbar-brand col-5" href="index.php">ElectroNacer</a>
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
                 <li class="nav-item">
@@ -98,26 +91,31 @@ try {
             $catg = $item['catg'];
             $img = $item['img'];
             $card = "
-                <div class='product-item $catg'>
+                <div class='product-item $catg card-pos'>
                     <img src= $img alt='Product 1'>
                     <h5>$title</h5>
                     <p>$priceAchat</p>
                     <p>$priceFinal</p>
                     <p class='qntMin'>Quantity minimale: $qnt_min</p>
                     <p class='qntStc'>Quantity en Stock:  $qnt_stock</p>
-                    <p>Categorie: $catg</p>                    
-                </div>
+                    <p>Categorie: $catg</p>                 
+                
             ";
+            if ($_COOKIE['role'] === '1') {
+                $card .= "<a href='modifierProduct.php' class='btn btn-primary pos'>Modifier</a>                 
+                <a href='hideProduct.php' class='btn btn-danger pos'>Masquer</a>";
+            }
+            $card .= "</div>";
 
             echo $card;
-            
+
 
         }
         ?>
     </div>
 
 
-    
+
 
     <script src="script.js"></script>
 </body>

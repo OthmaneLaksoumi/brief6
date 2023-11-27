@@ -8,14 +8,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // echo "<pre>";
 // print_r($catg);
 // echo "</pre>";
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-}
-
-
-
-
 ?>
 
 <!DOCTYPE html>

@@ -6,17 +6,22 @@ $stmt->execute();
 $catg = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (isset($_POST["modifie"])) {
-    $selected = $_POST["catg"];
+    $selected = $_COOKIE["catgChoisire"];
     $name = $_POST["name"];
     $desc = $_POST["desc"];
-    // $img = $_POST["img"];
+    $img = "assets/catgImages/" . $_FILES['img']['name'];
+
+
+
 
     $sql = "UPDATE categories
-    SET name = '$name', descrt = '$desc' 
+    SET name = '$name', descrt = '$desc', img = '$img' 
     WHERE name = '$selected'";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute();
+
+    move_uploaded_file($_FILES['img']['tmp_name'], 'C:\xampp\htdocs\brief6\assets\catgImages\\' . $_FILES['img']['name']);
 
     header("Location: modifieCatg.php");
     exit;
@@ -24,11 +29,13 @@ if (isset($_POST["modifie"])) {
 
 if (isset($_POST["choisir"])) {
     $catgSelected = $_POST["catg"];
+    setcookie("catgChoisire", $catgSelected);
     $stmt1 = $conn->prepare("SELECT * FROM categories WHERE name = '$catgSelected'");
     $stmt1->execute();
     $result = $stmt1->fetchAll(PDO::FETCH_ASSOC)[0];
     $catgName = $result["name"];
     $catgDesc = $result["descrt"];
+    $img = $result["img"];
 }
 ?>
 
@@ -74,8 +81,6 @@ if (isset($_POST["choisir"])) {
         </div>
     </nav>
 
-
-
     <section class="dashboard">
         <?php
         include("sideBar.html");
@@ -89,38 +94,44 @@ if (isset($_POST["choisir"])) {
                     <select name="catg" id="" class="form-control">
                         <?php
                         foreach ($catg as $item) {
-                            echo "<option>" . $item["name"] . "</option>";
+
+                            echo (isset($catgSelected) && $catgSelected === $item['name'] ? "<option selected>" : "<option>");
+                            echo $item["name"] . "</option>";
                         }
+
                         ?>
                     </select>
                 </div>
                 <input type="submit" class="btn btn-primary my-2" name="choisir" value="Choisir">
+            </form>
+            <?php if (isset($_POST["choisir"])) { ?>
+                <div class="mb-3 d-flex justify-content-center">
+                    <img src=<?php echo $img ?> alt="">
+                </div>
+                <form action="" method="post" class="container" enctype="multipart/form-data">
 
-                <?php if (isset($_POST["choisir"])) { ?>
-                    <form action="" method="post" class="container">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Nouveau Nom de la catégorie</label>
+                        <input type="text" class="form-control" id="title" name="name" required
+                            value='<?php echo $catgName ?>'>
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Nouveau Description de la catégorie</label>
+                        <textarea type="text" class="form-control" id="title" name="desc" rows="5"
+                            required><?php echo $catgDesc ?></textarea>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Nouveau Nom de la catégorie</label>
-                            <input type="text" class="form-control" id="title" name="name" required
-                                value='<?php echo $catgName ?>' >
-                        </div>
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Nouveau Description de la catégorie</label>
-                            <textarea type="text" class="form-control" id="title" name="desc" rows="5" required>
-                                    <?php echo $catgDesc ?>
-
-                                </textarea>
-                        </div>
-                        <!-- <div class="mb-3">
-                                <label for="img" class="form-label">Nouveau Image Source</label>
-                                <input type="text" class="form-control" id="img" name="img" required>
-                            </div> -->
+                    <div class="mb-3">
+                        <label for="img" class="form-label">Upload Image</label>
+                        <input type="file" class="form-control" id="img" name="img">
+                    </div>
 
 
-                        <input type="submit" class="btn btn-primary my-5" name="modifie" value="Modifier">
 
-                    </form>
-                <?php } ?>
+                    <input type="submit" class="btn btn-primary my-5" name="modifie" value="Modifier">
+
+                </form>
+            <?php } ?>
 
             </form>
         </div>
