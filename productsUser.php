@@ -5,6 +5,9 @@ try {
     $stmt = $conn->prepare("SELECT * FROM products WHERE isHide = 0");
     $stmt->execute();
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt1 = $conn->prepare("SELECT * FROM categories WHERE isHide = 0");
+    $stmt1->execute();
+    $catgs = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
 
 }
@@ -53,19 +56,30 @@ try {
         </div>
     </nav>
 
-    <div class="select">
 
-        <select id="filter">
-            <option value="0">All</option>
-            <option value="1">Arduino</option>
-            <option value="2">Afficheur</option>
-            <option value="3">Robot</option>
-            <option value="4">Diode</option>
-            <option value="5">Batterie</option>
-            <option value="6">produits en rupture de stock</option>
-        </select>
-    </div>
 
+    <?php
+    if (count($products) > 0) {
+        ?>
+        <div class="select">
+            <select id="filter">
+                <option value="0">All</option>
+                <?php
+                foreach ($catgs as $i => $catg) {
+                    $value = $i + 1;
+                    $catgName = $catg['name'];
+                    echo "<option value = $value>$catgName</option>";
+                }
+                ?>
+                <option value="6">produits en rupture de stock</option>
+            </select>
+
+        </div>
+    <?php } else {
+        echo "<p class='all-valid bg-warning'>Tous les produits sont masqués.</p>";
+
+    }
+    ?>
 
     <div class="product-menu">
         <?php

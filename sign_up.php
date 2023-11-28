@@ -4,7 +4,7 @@ try {
     $conn = new PDO("mysql:host=localhost;dbname=brief6", 'root', '');
     // $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $stmt = $conn->prepare("INSERT INTO users (email, username, pass, state, role) VALUES (:email, :username, :password, 0, 0)");
-    if(isset($_POST["submit"])) {
+    if (isset($_POST["submit"])) {
         $stmt->bindParam(':email', $_POST["email"]);
         $stmt->bindParam(':username', $_POST["username"]);
         $stmt->bindParam(':password', $_POST["password"]);
@@ -12,7 +12,20 @@ try {
         header("Location: index.php");
     }
 } catch (PDOException $e) {
-    $exit = true;
+    $exist = true;
+    $emailExist = false;
+    $usernameExist = false;
+    $passworfExist = false;
+    $infoExiste = ["email" => false, "username" => false, "password" => false];
+    if (strpos($e->errorInfo[2], "email")) {
+        $infoExiste["email"] = true;
+    }
+    if (strpos($e->errorInfo[2], "username")) {
+        $infoExiste["username"] = true;
+    }
+    if (strpos($e->errorInfo[2], "pass")) {
+        $infoExiste["password"] = true;
+    }
 }
 
 
@@ -52,9 +65,9 @@ try {
 
 
     <h1>Sign Up</h1>
-   
+
     <div class="parent-form">
-        <form  method="post" class="container">
+        <form method="post" class="container">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" name="email" required>
@@ -70,12 +83,19 @@ try {
             <input type="submit" class="btn btn-primary" value="Sign Up" name="submit">
         </form>
 
-        <?php 
-        if(isset($exit)) {
-            echo "<p class='text-danger'>The email is Duplicated</p>";
+        <?php
+        if (isset($exist)) {
+            // echo "<p class='text-danger'>The email is Duplicated</p>";
+            foreach ($infoExiste as $index => $info) {
+                if ($info) {
+                    echo "<p class='text-danger mt-4'>" . ucfirst($index)  . " existe déjà.</p>";
+                    break;
+                }
+            }
+
         }
-    
-    ?>
+
+        ?>
 
         <div class="sign">
             <p>Vous avez déjà un compte ? &nbsp;&nbsp;</p>
