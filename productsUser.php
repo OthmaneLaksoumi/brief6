@@ -55,6 +55,7 @@ try {
 
         </div>
     </nav>
+    <?php echo "<h1>Welcome " . $_COOKIE["username"] . "</h1>"; ?>
 
 
 
@@ -80,7 +81,7 @@ try {
 
     }
     ?>
-
+        
     <div class="product-menu">
         <?php
         foreach ($products as $item) {

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        select {
+            width: fit-content;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary container">
+        <div class="collapse navbar-collapse d-flex" id="navbarTogglerDemo01">
+            <a class="navbar-brand col-5" href="index.php">ElectroNacer</a>
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.php" id="home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="" id="home">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="" id="home">Dashboard</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="logout.php">Log Out</a>
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+
+    <script>
+        function displayProducts(object) {
+            let product_card = document.createElement('div');
+            product_card.className = "product-item";
+            product_card.innerHTML = `
+                <img src="${object['img']}" alt='Product'>
+                <h5>${object['etiquette']}</h5>
+                <p>${object['prixAchat']}</p>
+                <p>${object['prixFinal']}</p>
+                <p class='qntMin'>Quantity minimale: ${object['qntMin']}</p>
+                <p class='qntStc'>Quantity en Stock: ${object['qntStock']}</p>
+                <p>Categorie: ${object['catg']}</p>
+            `;
+            return product_card;
+        }
+
+
+
+        function getData(tableName) {
+            var result;
+            let myRequest = new XMLHttpRequest();
+            myRequest.open("GET", "ajaxConn.php?table=" + tableName, false);
+            myRequest.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    result = JSON.parse(this.responseText);
+                }
+            }
+            myRequest.send();
+            return result;
+        }
+
+
+        let filter = document.createElement('select');
+        filter.className = 'form-control container';
+        filter.innerHTML = "<option disabled selected>Choose a category</option>";
+        getData("categories").forEach(function (catg, i) {
+            filter.innerHTML += `<option>${catg['name']}</option>`;
+        });
+        document.body.appendChild(filter);
+
+        let container = document.createElement('div');
+        container.className = 'product-menu';
+        filter.addEventListener('change', function () {
+            container.innerHTML = '';
+            getData("products").forEach(function (item) {
+                if (item['catg'] === filter.value) {
+                    container.appendChild(displayProducts(item));
+                }
+            });
+            document.body.appendChild(container);
+        })
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

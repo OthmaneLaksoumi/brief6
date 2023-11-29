@@ -43,7 +43,7 @@ filter.addEventListener('change', function () {
     }
 });
 
-let itemsPerPage = 5;
+let itemsPerPage = 3;
 let itemsList = document.querySelector('.product-menu').querySelectorAll('.product-item');
 const totalItems = itemsList.length;
 const numberOfPages = Math.ceil(totalItems / itemsPerPage);

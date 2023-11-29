@@ -42,7 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         move_uploaded_file($_FILES['img']['tmp_name'], 'C:\xampp\htdocs\brief6\assets\images\\' . $_FILES['img']['name']);
 
-
         $sql = "UPDATE `products` 
         SET `etiquette` = '$title', `descpt` = '$desc', `prixAchat` = '$prixAchat', `prixFinal` = '$prixFinal',
         `qntMin` = '$qnt_min', `qntStock` = '$qnt_stock', `catg` = '$catg', `img` = '$img' WHERE `products`.`codeBarres` = '$ref'";
@@ -52,8 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         setcookie("ref", "", time() - 1);
 
-        header("Refresh: 1; url=modifierProduct.php");
-        exit;
     }
 }
 

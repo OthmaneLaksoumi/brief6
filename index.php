@@ -15,7 +15,7 @@ try {
 
 
         if (count($result) == 1) {
-            
+
             setcookie("state", $result[0]["state"], time() + 60 * 60 * 24 * 10);
             setcookie("role", $result[0]["role"], time() + 60 * 60 * 24 * 10);
             if ($result[0]["state"] === 1) {
@@ -49,107 +49,15 @@ try {
 </head>
 
 <body>
-    
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary container">
-        <div class="collapse navbar-collapse d-flex" id="navbarTogglerDemo01">
-            <a class="navbar-brand col-5" href="index.php">ElectroNacer</a>
-
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.php" id="home">Home</a>
-                </li>
-                <?php
-                if (isset($_COOKIE["state"], $_COOKIE["role"])) {
-                    if ($_COOKIE["state"] === "1" && $_COOKIE["role"] === "0") {
-
-                        ?>
-
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="productsUser.php" id="home">Products</a>
-                        </li>
-
-                    <?php } ?>
-
-                    <?php
-                    if (isset($_COOKIE["state"], $_COOKIE["role"])) {
-                        if ($_COOKIE["state"] === "1" && $_COOKIE["role"] === "1") {
-                            ?>
-
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="productsUser.php" id="home">Products</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="dashboard.php" id="home">Dashboard</a>
-                            </li>
-
-                            <?php
-                        }
-                        ?>
-                        <!-- <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                        <div class="sidebar-sticky">
-                            <ul class="nav flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="#">
-                                        Dashboard
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        Reports
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        Settings
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav> -->
-
-                    <?php }
-                } ?>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="logout.php">Log Out</a>
-                </li>
-
-            </ul>
-
-        </div>
-    </nav>
-
-    <!-- <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">
-                                Reports
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">
-                                Settings
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-        </div>
-    </div> -->
 
     <?php if (!isset($_COOKIE["username"])) { ?>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary container">
+            <div class="collapse navbar-collapse position-relative " id="navbarTogglerDemo01">
+                <a class="navbar-brand col-6" href="index.php">ElectroNacer</a>
+            </div>
+        </nav>
         <h1>Login</h1>
-
         <div class="parent-form">
             <form action="" method="post" class="container">
                 <div class="mb-3">
@@ -179,7 +87,7 @@ try {
         <?php
     } else {
 
-        echo "<h1>Welcome " . $_COOKIE["username"] . "</h1>";
+        include("productsUser.php");
 
 
         ?>

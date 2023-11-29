@@ -5,8 +5,13 @@ $stmt = $conn->prepare("SELECT * FROM users");
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$stmt1 = $conn->prepare("SELECT count(*) AS nmbUsers FROM users");
+$stmt1->execute();
+$result = $stmt1->fetch()['nmbUsers'];
+
+
 // echo "<pre>";
-// print_r($catg);
+// print_r($result);
 // echo "</pre>";
 ?>
 
@@ -60,7 +65,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         ?>
 
         <div class="col-md-10">
-            <h1>Liste des utilisateurs</h1>
+            <h1>Liste des utilisateurs <?php echo $result ?></h1>
             <table>
                 <tr>
                     <th>Email</th>
